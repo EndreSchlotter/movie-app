@@ -24,26 +24,23 @@ async function getMovies(url) {
     $.each(movies, (index, movie) => {
         const { poster_path, title, vote_average, id } = movie;
 
-        if(poster_path) {
+        if (poster_path) {
             output += `
             <div class="col">
                 <div class="card h-100">
                     <img src="${IMG_PATH + poster_path}" class="card-img-top" alt="poster of ${title}">
                     <div class="card-body">
-                        <h5 class="card-title">${title}</h5>
+                        <h5 class="card-title text-white">${title}</h5>
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-primary" onclick="getMovie(${id})">Movie details</button>
+                        <button class="btn btn-outline-primary" onclick="getMovie(${id})">Movie details</button>
                         <span class="${getClassByRate(vote_average)}">${vote_average}</span>
                     </div>
                 </div>
-            </div>
-            `
+            </div>`
         }
     });
-
     $('#movies').html(output);
-
 }
 
 $('.btnLink').on('click', e => {
@@ -58,8 +55,7 @@ $('.btnLink').on('click', e => {
     else if (chosenButton === "upcoming") {
         getMovies(API_URL_UPCOMING);
     }
-})
-
+});
 
 function getClassByRate(vote) {
     if (vote >= 8) {
@@ -70,29 +66,35 @@ function getClassByRate(vote) {
         return 'red';
 }
 
-async function getMovie(id) {
-    /* let movieId = sessionStorage.getItem('movieId'); */
-    const resp = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=a2fba8893e059bcb6fb80e0a9c1e55d6`);
+async function getMovie(movieId) {
+    const resp = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=a2fba8893e059bcb6fb80e0a9c1e55d6`);
     const respData = await resp.json();
     let movie = respData;
-    
-    const { backdrop_path, original_title, overview, imdb_id } = movie;
-    
+    console.log(movie);
+
+    const { backdrop_path, original_title, overview,
+            imdb_id, id, release_date, runtime, genres } = movie;
+
     let output = `
     <div id="myModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">${original_title}</h5>
+                    <h5 class="modal-title text-white">${original_title}</h5>
                     <i onclick="$('#myModal').modal('hide')" class="fas fa-times"></i>
                 </div>
                 <div class="modal-body">
                     <img class="modal-img" src="${IMG_PATH + backdrop_path}" alt="poster of ${original_title}">
-                    <p>${overview}</p>
+                    <ul class="list-group">
+                        <li class="list-group-item">Genres: ${genres[0].name}, ${genres[1].name} </li>
+                        <li class="list-group-item">Release date: ${release_date}</li>
+                        <li class="list-group-item">Length: ${runtime} min</li>
+                    </ul>
+                    <p class="text-white overview">${overview}</p>
                 </div>
-                <div class="modal-footer">
-                    <a href="https://www.imdb.com/title/${imdb_id}" class="btn btn-primary" target="_blank">View IMDB</a>
-                    <button onclick="$('#myModal').modal('hide')" class="btn btn-secondary">Back to search</button>
+                <div class="modal-footer justify-content-between">
+                    <a class="nav-link" href="https://www.imdb.com/title/${imdb_id}" target="_blank"><button class="btn btn-outline-primary">View on IMDB</button></a>
+                    <button class="btn btn-outline-success" onclick="addToFavorites('${id}')">Add to favorites</button>
                 </div>
             </div>
         </div>
@@ -100,4 +102,4 @@ async function getMovie(id) {
     `
     $('#movie').html(output);
     $('#myModal').modal('show')
-}
+};
