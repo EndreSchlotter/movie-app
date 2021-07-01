@@ -18,11 +18,9 @@
 }
 
 .card-footer {
-    color: #fff;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem;
 }
 
 .card-footer span {
@@ -46,18 +44,24 @@
 
 .modal-img {
     width: 100%;
-}
-
-.btn {
-    border: none;
-    outline: none;
+    margin-bottom: 2rem;
 }
 
 .fas {
     font-size: 1.5rem;
     cursor: pointer;
+    transition: all 500ms ease-in-out;
 }
 
 .fas:hover {
-    transform: scale(1.2);
+    transform: rotate(180deg);
+    color: red;
+}
+
+.btn-success {
+    cursor: not-allowed!important;
+}
+
+.overview {
+    margin-top: 2rem;
 }
