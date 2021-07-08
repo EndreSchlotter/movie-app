@@ -70,7 +70,6 @@ async function getMovie(movieId) {
     const resp = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=a2fba8893e059bcb6fb80e0a9c1e55d6`);
     const respData = await resp.json();
     let movie = respData;
-    console.log(movie);
 
     const { backdrop_path, original_title, overview,
             imdb_id, id, release_date, runtime, genres } = movie;
@@ -92,9 +91,8 @@ async function getMovie(movieId) {
                     </ul>
                     <p class="text-white overview">${overview}</p>
                 </div>
-                <div class="modal-footer justify-content-between">
+                <div class="modal-footer">
                     <a class="nav-link" href="https://www.imdb.com/title/${imdb_id}" target="_blank"><button class="btn btn-outline-primary">View on IMDB</button></a>
-                    <button class="btn btn-outline-success" onclick="addToFavorites('${id}')">Add to favorites</button>
                 </div>
             </div>
         </div>
